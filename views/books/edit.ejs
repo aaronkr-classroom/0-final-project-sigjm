@@ -1,0 +1,14 @@
+<div class="data-form">
+  <form class="form-signin" action="<%=`/courses/${book._id}/update?_method=PUT`%>" method="POST">
+    <h2 class="form-signin-heading">Edit Book:</h2>
+    <label for="inputTitle">Book Title</label>
+    <input type="text" name="title" id="inputTitle" class="form-control" value="<%= book.title %>" placeholder="Title" autofocus>
+    <label for="inputDescription">Author</label>
+    <input type="text" name="description" id="inputDescription" class="form-control" value="<%= book.author %>" placeholder="Description">
+    <label for="inputMaxStudents">BookCode</label>
+    <input type="text" name="maxStudents" id="inputMaxStudents" pattern="\d*" class="form-control" value="<%= book.maxStudents %>" placeholder="Max Students" required>
+    <label for="inputCost">Cost</label>
+    <input type="text" name="cost" id="inputCost" pattern="\d*" class="form-control" value="<%= book.cost %>" placeholder="Cost" required>
+    <br /><button class="btn btn-lg btn-primary btn-block" type="submit">Save</button>
+  </form>
+</div>

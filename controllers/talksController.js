@@ -18,10 +18,18 @@ module.exports = {
       });
   },
   indexView: (req, res) => {
-    res.render("talks/index", {
-      page: "talks",
-      title: "All Talks",
-    }); // 분리된 액션으로 뷰 렌더링
+    /*
+     * Listing 26.3 (p. 384)
+     * @TODO: userController.js에서 쿼리 매개변수가 존재할 때 JSON으로 응답하기
+     */
+    if (req.query.format === "json") {
+      res.json(res.locals.users);
+    } else {
+      res.render("talks/index", {
+        page: "talks",
+        title: "All Talks",
+      }); // 분리된 액션으로 뷰 렌더링
+    }
   },
 
   /**
@@ -45,27 +53,52 @@ module.exports = {
   // 사용자를 데이터베이스에 저장하기 위한 create 액션 추가
   create: (req, res, next) => {
     let talkParams = {
-      name: {
-        first: req.body.first,
-        last: req.body.last,
+      meta: {
+        title: req.body.title,
+        subtitle: req.body.subtitle,
+        abstractOneLine: req.body.abstractOneLine,
+        abstract: req.body.abstract,
+        keywords: req.body.keywords,
       },
-      email: req.body.email,
-      username: req.body.username,
-      password: req.body.password,
-      profileImg: req.body.profileImg,
+      given: {
+        date: req.body.date,
+        location: {
+          name: req.body.locationName,
+          korean: req.body.locationKorean,
+          url: req.body.locationUrl,
+        },
+        organization: {
+          name: req.body.organizationName,
+          korean: req.body.organizationKorean,
+          url: req.body.organizationUrl,
+        },
+        event: {
+          name: req.body.eventName,
+          korean: req.body.eventKorean,
+          url: req.body.eventUrl,
+        },
+      },
+      links: {
+        code: req.body.code,
+        slides: req.body.slides,
+        article: req.body.article,
+      },
+      talkImg: req.body.talkImg,
+      user: req.user._id,
     };
     // 폼 파라미터로 사용자 생성
     Talk.create(talkParams)
-      .then((talk) => {
-        res.locals.redirect = "/talks";
-        res.locals.talk = talk;
-        next();
-      })
-      .catch((error) => {
-        console.log(`Error saving talk: ${error.message}`);
-        next(error);
-      });
+        .then((talk) => {
+          res.locals.redirect = "/talks";
+          res.locals.talk = talk;
+          next();
+        })
+        .catch((error) => {
+          console.log(`Error saving talk: ${error.message}`);
+          next(error);
+        });
   },
+
 
   // 분리된 redirectView 액션에서 뷰 렌더링
   redirectView: (req, res, next) => {

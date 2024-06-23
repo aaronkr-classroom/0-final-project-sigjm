@@ -5,9 +5,9 @@ const mongoose = require("mongoose"),
   Talk = require("../models/Talk");
 
 // 데이터베이스 연결 설정
-mongoose.connect("mongodb://127.0.0.1:27017/ut-nodejs", {
-  useNewUrlParser: true,
-});
+mongoose.connect(
+    "mongodb+srv://jmllem:J0Mr5PUxBlcrlDio@jmllem.f6uraub.mongodb.net/?retryWrites=true&w=majority&appName=Jmllem/ut-node", // 데이터베이스 연결 설정 atlas 경로
+);
 
 mongoose.connection;
 

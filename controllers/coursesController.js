@@ -7,8 +7,8 @@
  * courseController.js에서 인덱스 액션 생성과 index 액션의 재방문
  */
 const Course = require("../models/Course"), // 사용자 모델 요청
-  User = require("../models/User"), // @TODO: Lesson 27.3
-  httpStatus = require("http-status-codes"); // @TODO: Lesson 27 HTTP 상태 코드 요청
+    User = require("../models/User"), // @TODO: Lesson 27.3
+    httpStatus = require("http-status-codes"); // @TODO: Lesson 27 HTTP 상태 코드 요청
 
 module.exports = {
   /**
@@ -47,7 +47,7 @@ module.exports = {
    */
   join: (req, res, next) => {
     let courseId = req.params.id, // 요청으로부터 강좌 ID 수집
-      currentUser = req.user; // 요청으로부터 현재 사용자 수집
+        currentUser = req.user; // 요청으로부터 현재 사용자 수집
 
     if (currentUser) {
       // 사용자가 로그인 중인지 확인
@@ -56,13 +56,13 @@ module.exports = {
           courses: courseId, // 사용자의 강좌 배열에 강좌 ID 추가
         },
       }) // 사용자의 강좌 배열에 강좌 ID 추가
-        .then(() => {
-          res.locals.success = true;
-          next();
-        })
-        .catch((error) => {
-          next(error);
-        });
+          .then(() => {
+            res.locals.success = true;
+            next();
+          })
+          .catch((error) => {
+            next(error);
+          });
     } else {
       next(new Error("User must log in."));
     }
@@ -95,16 +95,16 @@ module.exports = {
 
   index: (req, res, next) => {
     Course.find() // index 액션에서만 퀴리 실행
-      .then((courses) => {
-        // 사용자 배열로 index 페이지 렌더링
-        res.locals.courses = courses; // 응답상에서 사용자 데이터를 저장하고 다음 미들웨어 함수 호출
-        next();
-      })
-      .catch((error) => {
-        // 로그 메시지를 출력하고 홈페이지로 리디렉션
-        console.log(`Error fetching courses: ${error.message}`);
-        next(error); // 에러를 캐치하고 다음 미들웨어로 전달
-      });
+        .then((courses) => {
+          // 사용자 배열로 index 페이지 렌더링
+          res.locals.courses = courses; // 응답상에서 사용자 데이터를 저장하고 다음 미들웨어 함수 호출
+          next();
+        })
+        .catch((error) => {
+          // 로그 메시지를 출력하고 홈페이지로 리디렉션
+          console.log(`Error fetching courses: ${error.message}`);
+          next(error); // 에러를 캐치하고 다음 미들웨어로 전달
+        });
   },
   indexView: (req, res) => {
     /*
@@ -149,15 +149,15 @@ module.exports = {
     };
     // 폼 파라미터로 사용자 생성
     Course.create(courseParams)
-      .then((course) => {
-        res.locals.redirect = "/courses";
-        res.locals.course = course;
-        next();
-      })
-      .catch((error) => {
-        console.log(`Error saving course: ${error.message}`);
-        next(error);
-      });
+        .then((course) => {
+          res.locals.redirect = "/courses";
+          res.locals.course = course;
+          next();
+        })
+        .catch((error) => {
+          console.log(`Error saving course: ${error.message}`);
+          next(error);
+        });
   },
 
   // 분리된 redirectView 액션에서 뷰 렌더링
@@ -180,14 +180,14 @@ module.exports = {
   show: (req, res, next) => {
     let courseId = req.params.id; // request params로부터 사용자 ID 수집
     Course.findById(courseId) // ID로 사용자 찾기
-      .then((course) => {
-        res.locals.course = course; // 응답 객체를 통해 다음 믿들웨어 함수로 사용자 전달
-        next();
-      })
-      .catch((error) => {
-        console.log(`Error fetching course by ID: ${error.message}`);
-        next(error); // 에러를 로깅하고 다음 함수로 전달
-      });
+        .then((course) => {
+          res.locals.course = course; // 응답 객체를 통해 다음 믿들웨어 함수로 사용자 전달
+          next();
+        })
+        .catch((error) => {
+          console.log(`Error fetching course by ID: ${error.message}`);
+          next(error); // 에러를 로깅하고 다음 함수로 전달
+        });
   },
 
   // show 뷰의 렌더링
@@ -206,41 +206,41 @@ module.exports = {
   edit: (req, res, next) => {
     let courseId = req.params.id;
     Course.findById(courseId) // ID로 데이터베이스에서 사용자를 찾기 위한 findById 사용
-      .then((course) => {
-        res.render("courses/edit", {
-          course: course,
-          page: "edit-course",
-          title: "Edit Course",
-        }); // 데이터베이스에서 내 특정 사용자를 위한 편집 페이지 렌더링
-      })
-      .catch((error) => {
-        console.log(`Error fetching course by ID: ${error.message}`);
-        next(error);
-      });
+        .then((course) => {
+          res.render("courses/edit", {
+            course: course,
+            page: "edit-course",
+            title: "Edit Course",
+          }); // 데이터베이스에서 내 특정 사용자를 위한 편집 페이지 렌더링
+        })
+        .catch((error) => {
+          console.log(`Error fetching course by ID: ${error.message}`);
+          next(error);
+        });
   },
 
   // update 액션 추가
   update: (req, res, next) => {
     let courseId = req.params.id,
-      courseParams = {
-        title: req.body.title,
-        description: req.body.description,
-        maxStudents: req.body.maxStudents,
-        cost: req.body.cost,
-      }; // 요청으로부터 사용자 파라미터 취득
+        courseParams = {
+          title: req.body.title,
+          description: req.body.description,
+          maxStudents: req.body.maxStudents,
+          cost: req.body.cost,
+        }; // 요청으로부터 사용자 파라미터 취득
 
     Course.findByIdAndUpdate(courseId, {
       $set: courseParams,
     }) //ID로 사용자를 찾아 단일 명령으로 레코드를 수정하기 위한 findByIdAndUpdate의 사용
-      .then((course) => {
-        res.locals.redirect = `/courses/${courseId}`;
-        res.locals.course = course;
-        next(); // 지역 변수로서 응답하기 위해 사용자를 추가하고 다음 미들웨어 함수 호출
-      })
-      .catch((error) => {
-        console.log(`Error updating course by ID: ${error.message}`);
-        next(error);
-      });
+        .then((course) => {
+          res.locals.redirect = `/courses/${courseId}`;
+          res.locals.course = course;
+          next(); // 지역 변수로서 응답하기 위해 사용자를 추가하고 다음 미들웨어 함수 호출
+        })
+        .catch((error) => {
+          console.log(`Error updating course by ID: ${error.message}`);
+          next(error);
+        });
   },
 
   /**
@@ -250,13 +250,13 @@ module.exports = {
   delete: (req, res, next) => {
     let courseId = req.params.id;
     Course.findByIdAndRemove(courseId) // findByIdAndRemove 메소드를 이용한 사용자 삭제
-      .then(() => {
-        res.locals.redirect = "/courses";
-        next();
-      })
-      .catch((error) => {
-        console.log(`Error deleting course by ID: ${error.message}`);
-        next();
-      });
+        .then(() => {
+          res.locals.redirect = "/courses";
+          next();
+        })
+        .catch((error) => {
+          console.log(`Error deleting course by ID: ${error.message}`);
+          next();
+        });
   },
 };
